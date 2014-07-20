@@ -25,7 +25,7 @@ public class Bird {
     public void update(float delta){
         velocity.add(acceleration.cpy().scl(delta));
 
-        // cap the terminal velocity (falling speed)
+        // cap the terminal velocity (falling speed)t
         if(velocity.y > 200) {
             velocity.y = 200;
         }
