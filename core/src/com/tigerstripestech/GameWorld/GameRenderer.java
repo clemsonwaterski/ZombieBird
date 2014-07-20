@@ -3,7 +3,9 @@ package com.tigerstripestech.GameWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.tigerstripestech.GameObjects.Bird;
 import com.tigerstripestech.ZBHelpers.AssetLoader;
@@ -21,6 +23,15 @@ public class GameRenderer {
     private int gameHeight;
     private int midPointY;
 
+    // Game objects
+    private Bird bird;
+
+    // Game assets
+    private TextureRegion bg, grass;
+    private Animation birdAnimation;
+    private TextureRegion birdMid, birdDown,birdUp;
+    private TextureRegion skullUp, skullDown, bar;
+
     public GameRenderer(GameWorld world, int gameHeight, int midPointY){
         myWorld = world;
 
@@ -35,12 +46,29 @@ public class GameRenderer {
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
+
+        // initilize instance variables
+        initGameObjects();
+        initAssets();
+    }
+
+    private void initGameObjects(){
+        bird = myWorld.getBird();
+    }
+
+    private void initAssets(){
+        bg = AssetLoader.bg;
+        grass = AssetLoader.grass;
+        birdAnimation = AssetLoader.birdAnimation;
+        birdDown = AssetLoader.birdDown;
+        birdMid = AssetLoader.bird;
+        birdUp = AssetLoader.birdUp;
+        skullUp = AssetLoader.skullUp;
+        skullDown = AssetLoader.skullDown;
+        bar = AssetLoader.bar;
     }
 
     public void render(float runTime) {
-
-        // Moving this outside of the loop for performance later
-        Bird bird = myWorld.getBird();
 
         // Fill game screen background; prevents flickering
         Gdx.gl.glClearColor(0,0,0,1);
@@ -65,11 +93,17 @@ public class GameRenderer {
         batcher.begin();
         // Disable transparency for performance if not necessary
         batcher.disableBlending();
-        batcher.draw(AssetLoader.bg, 0, midPointY + 23, 136, 43);
+        batcher.draw(bg, 0, midPointY + 23, 136, 43);
 
         // bird needs transparency
         batcher.enableBlending();
-        batcher.draw(AssetLoader.birdAnimation.getKeyFrame(runTime), bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
+
+        if (bird.shouldntFlap()){
+            batcher.draw(birdMid,bird.getX(), bird.getY(), bird.getWidth()/ 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+        }
+        else{
+            batcher.draw(birdAnimation.getKeyFrame(runTime), bird.getX(), bird.getY(), bird.getWidth() / 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+        }
 
         batcher.end();
 
