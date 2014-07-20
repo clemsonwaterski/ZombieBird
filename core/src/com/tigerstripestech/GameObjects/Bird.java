@@ -49,7 +49,7 @@ public class Bird {
         return width;
     }
 
-    public float getHeigh(){
+    public float getHeight(){
         return height;
     }
 
