@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -11,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     public static Texture texture;
-    public static Sound dead;
+    public static Sound dead, flap, coin;
     public static TextureRegion bg, grass;
 
     public static Animation birdAnimation;
@@ -19,10 +20,24 @@ public class AssetLoader {
 
     public static TextureRegion skullUp, skullDown, bar;
 
+    public static BitmapFont font, shadow;
+
     public static void load() {
+        // load images
         texture = new Texture(Gdx.files.internal("data/texture.png"));
-        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        // load audio
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
+        flap = Gdx.audio.newSound(Gdx.files.internal("data/flap.wav"));
+        coin = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
+
+        // load font
+        font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
+        font.setScale(.25f, -.25f);
+        shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
+        shadow.setScale(.25f, -.25f);
+
 
         bg = new TextureRegion(texture, 0, 0, 136, 43);
         bg.flip(false, true);
@@ -55,5 +70,10 @@ public class AssetLoader {
 
     public static void dispose(){
         texture.dispose();
+        dead.dispose();
+        flap.dispose();
+        coin.dispose();
+        font.dispose();
+        shadow.dispose();
     }
 }
