@@ -1,5 +1,6 @@
 package com.tigerstripestech.GameObjects;
 
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 import javax.xml.bind.ValidationException;
@@ -60,4 +61,7 @@ public class Scrollable {
         return height;
     }
 
+    public void stop() {
+        velocity.x = 0;
+    }
 }

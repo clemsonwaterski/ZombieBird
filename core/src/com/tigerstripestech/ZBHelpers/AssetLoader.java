@@ -1,6 +1,7 @@
 package com.tigerstripestech.ZBHelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     public static Texture texture;
+    public static Sound dead;
     public static TextureRegion bg, grass;
 
     public static Animation birdAnimation;
@@ -19,6 +21,7 @@ public class AssetLoader {
 
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         bg = new TextureRegion(texture, 0, 0, 136, 43);

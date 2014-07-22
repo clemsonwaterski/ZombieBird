@@ -3,6 +3,7 @@ package com.tigerstripestech.GameWorld;
 import com.badlogic.gdx.math.Rectangle;
 import com.tigerstripestech.GameObjects.Bird;
 import com.tigerstripestech.GameObjects.ScrollHandler;
+import com.tigerstripestech.ZBHelpers.AssetLoader;
 
 /**
  * Created by Josh on 7/10/2014.
@@ -12,6 +13,8 @@ public class GameWorld {
     //private Rectangle rect = new Rectangle(0, 0,17,12);  Day 4 rectangle code
     private Bird bird;
     private ScrollHandler scroller;
+
+    private boolean isAlive = true;
 
     public GameWorld(int midPointY){
         this.bird = new Bird(33, midPointY - 5, 17, 12);
@@ -37,6 +40,12 @@ public class GameWorld {
 
         bird.update(delta);
         scroller.update(delta);
+
+        if(isAlive && scroller.collides(bird)){
+            scroller.stop();
+            AssetLoader.dead.play();
+            isAlive = false;
+        }
     }
 
     public Bird getBird(){
