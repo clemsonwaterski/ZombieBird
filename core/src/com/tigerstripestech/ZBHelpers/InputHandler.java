@@ -2,16 +2,19 @@ package com.tigerstripestech.ZBHelpers;
 
 import com.badlogic.gdx.InputProcessor;
 import com.tigerstripestech.GameObjects.Bird;
+import com.tigerstripestech.GameWorld.GameWorld;
 
 /**
  * Created by Josh on 7/13/2014.
  */
 public class InputHandler implements InputProcessor{
 
+    private GameWorld myWorld;
     private Bird myBird;
 
-    public InputHandler(Bird bird){
-        this.myBird = bird;
+    public InputHandler(GameWorld myWorld){
+        this.myWorld = myWorld;
+        this.myBird = myWorld.getBird();
     }
 
     @Override
@@ -31,7 +34,18 @@ public class InputHandler implements InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if (myWorld.isReady()){
+            myWorld.start();
+        }
+
         myBird.onClick();
+
+        if(myWorld.isGameOver()){
+            // Reset all variables, go to GameState.READY
+            myWorld.restart();
+        }
+
         return true;
     }
 

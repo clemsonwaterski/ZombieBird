@@ -14,34 +14,49 @@ public class GameWorld {
     //private Rectangle rect = new Rectangle(0, 0,17,12);  Day 4 rectangle code
     private Bird bird;
     private ScrollHandler scroller;
+    private int midPointY;
 
     private Rectangle ground;
 
     private int score = 0;
 
+    public enum GameState{
+        READY, RUNNING, GAMEOVER
+    }
+
+    private GameState currentState;
+
+
     public GameWorld(int midPointY){
+        currentState = GameState.READY;
+        this.midPointY = midPointY;
+
         this.bird = new Bird(33, midPointY - 5, 17, 12);
 
         // the grass should start 66 pixels below the midPointY
         this.scroller = new ScrollHandler(this, midPointY + 66);
 
         ground = new Rectangle(0, midPointY + 66, 136, 11);
+
+
     }
 
-    public void update(float delta) {
-        /* Day 4 rectangle code
-        System.out.println("GameWorld - update");
-        rect.x++;
-        rect.y++;
-        if(rect.x > 137) {
-            rect.x = 0;
-            rect.y = 0;
+    public void update(float delta){
+        switch(currentState){
+            case READY:
+                updateReady(delta);
+                break;
+            case RUNNING:
+            default:
+                updateRunning(delta);
         }
-        if(rect.y > 205) {
-            rect.y = 0;
-            rect.y = 0;
-        }
-        */
+    }
+
+    public void updateReady(float delta){
+
+    }
+
+    public void updateRunning(float delta) {
 
         if (delta > .15f){
             delta = .15f;
@@ -60,6 +75,7 @@ public class GameWorld {
             scroller.stop();
             bird.die();
             bird.decelerate();
+            currentState = GameState.GAMEOVER;
         }
     }
 
@@ -77,6 +93,26 @@ public class GameWorld {
 
     public void addScore(int increment){
         score += increment;
+    }
+
+    public boolean isReady(){
+        return currentState == GameState.READY;
+    }
+
+    public void start(){
+        currentState = GameState.RUNNING;
+    }
+
+    public void restart() {
+        currentState = GameState.READY;
+        score = 0;
+        bird.onRestart(midPointY - 5);
+        scroller.onRestart();
+        currentState = GameState.READY;
+    }
+
+    public boolean isGameOver(){
+        return currentState == GameState.GAMEOVER;
     }
 
 }
