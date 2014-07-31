@@ -1,6 +1,7 @@
 package com.tigerstripestech.ZBHelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -22,7 +23,16 @@ public class AssetLoader {
 
     public static BitmapFont font, shadow;
 
+    public static Preferences prefs;
+
     public static void load() {
+        // Create high score preferences key value pair
+        prefs = Gdx.app.getPreferences("ZombieBird");
+
+        if(!prefs.contains("highScore")){
+            prefs.putInteger("highScore", 0);
+        }
+
         // load images
         texture = new Texture(Gdx.files.internal("data/texture.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -75,5 +85,14 @@ public class AssetLoader {
         coin.dispose();
         font.dispose();
         shadow.dispose();
+    }
+
+    public static void setHighScore(int val){
+        prefs.putInteger("highScore", val);
+        prefs.flush();
+    }
+
+    public static int getHighScore(){
+        return prefs.getInteger("highScore");
     }
 }
